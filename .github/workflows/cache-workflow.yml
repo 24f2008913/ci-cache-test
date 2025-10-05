@@ -1,0 +1,32 @@
+name: CI with Cache
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Cache dependencies
+      - name: prime-cache-5b3bc7e
+        id: cache-step
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm  # or your dependency folder (e.g., ~/.cache/pip for Python)
+          key: cache-5b3bc7e
+          restore-keys: |
+            cache-5b3bc7e
+
+      - name: Show cache hit/miss
+        run: echo "Cache hit? ${{ steps.cache-step.outputs.cache-hit }}"
+
+      # Example install step
+      - name: Install dependencies
+        run: npm install  # or pip install -r requirements.txt
