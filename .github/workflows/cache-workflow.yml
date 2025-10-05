@@ -1,4 +1,4 @@
-name: CI with Cache
+name: CI with Python Cache
 
 on:
   push:
@@ -14,12 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Cache dependencies
       - name: prime-cache-5b3bc7e
         id: cache-step
         uses: actions/cache@v4
         with:
-          path: ~/.npm  # or your dependency folder (e.g., ~/.cache/pip for Python)
+          path: ~/.cache/pip
           key: cache-5b3bc7e
           restore-keys: |
             cache-5b3bc7e
@@ -27,6 +26,5 @@ jobs:
       - name: Show cache hit/miss
         run: echo "Cache hit? ${{ steps.cache-step.outputs.cache-hit }}"
 
-      # Example install step
       - name: Install dependencies
-        run: npm install  # or pip install -r requirements.txt
+        run: pip install -r requirements.txt || echo "No requirements file"
